@@ -1,12 +1,24 @@
 package br.com.model;
 
-public class Informacoes {
+public class Informacoes implements Comparable<Informacoes> {
 
 	private String usuario;
 	private String morte;
 	private String outroUsuario;
 	private String arma;
+	private Integer quantidade;
 	
+	@Override
+	public int compareTo(Informacoes o) {
+		// TODO Auto-generated method stub
+		return Integer.compare(this.getQuantidade(), o.getQuantidade());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		final Informacoes other = (Informacoes) obj;
+		return getUsuario().equalsIgnoreCase(other.getUsuario());
+	}
 	public String getUsuario() {
 		return usuario;
 	}
@@ -30,5 +42,12 @@ public class Informacoes {
 	}
 	public void setArma(String arma) {
 		this.arma = arma;
+	}
+	
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
 	}
 }

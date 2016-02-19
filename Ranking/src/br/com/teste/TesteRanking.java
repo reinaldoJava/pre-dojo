@@ -2,8 +2,11 @@ package br.com.teste;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -16,19 +19,26 @@ public class TesteRanking {
 	public void gerarMapaDadosTeste() throws Exception {
 		ControllerRanking controllerRanking = new ControllerRanking();
 		FileReader log = new FileReader("arquivo.log");
-		assertEquals(50, controllerRanking.gerarMapaDados(log).size());
+		assertEquals(48, controllerRanking.gerarMapaDados(log).size());
 	}
 	@Test
 	public void retornarListaInformacoesTeste() throws Exception {
 		ControllerRanking controllerRanking = new ControllerRanking();
-		List<Informacoes> lista = null;
 		FileReader log = new FileReader("arquivo.log");
-		assertEquals(50, controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log)).size());
+		assertEquals(44, controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log)).size());
 	}
 	@Test
-	public void rankingUsuarios() {
-		// TODO Auto-generated method stub
-
+	public void rankingUsuariosTest() throws FileNotFoundException {
+		Map<String, Integer> rankingList = new HashMap<String, Integer>();
+		rankingList.put("Roman", 19);
+		rankingList.put("<WORLD>", 9);
+		rankingList.put("Z99ptrz99", 7);
+		rankingList.put("Nick", 5);
+		rankingList.put("Natan", 4);
+		FileReader log = new FileReader("arquivo.log");
+		ControllerRanking controllerRanking = new ControllerRanking();
+		List<Informacoes> list = controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log));
+		assertEquals(rankingList, controllerRanking.rankingUsuarios(list));
 	}
 	
 }
