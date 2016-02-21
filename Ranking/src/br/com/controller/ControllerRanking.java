@@ -12,7 +12,6 @@ import br.com.model.Informacoes;
 
 public class ControllerRanking {
 
-	
 	public Map<String, String> gerarMapaDados(FileReader log)
 			throws FileNotFoundException {
 		@SuppressWarnings("resource")
@@ -26,6 +25,7 @@ public class ControllerRanking {
 				continue;
 			dados.put(data, info);
 		}
+
 		return dados;
 	}
 
@@ -44,24 +44,32 @@ public class ControllerRanking {
 			informacoes.setArma(tempArray[4]);
 			listInfomacoes.add(informacoes);
 		}
+		
 		return listInfomacoes;
 	}
 
-	public Map<String, Integer> gerarRankingUsuarios(List<Informacoes> list) {
-		Map<String, Integer> dadosUsuarios = new HashMap<String, Integer>();
-		Integer index = 0;
+	public Map<String, List<Integer>> gerarRankingUsuarios(List<Informacoes> list) {
+		Map<String, List<Integer>> dadosUsuarios = new HashMap<String, List<Integer>>();
+	
 		for (int i = 0; i < list.size(); i++) {	
-			index = 0;
+			Integer	index = 0;
+			Integer morte = 0;
+			ArrayList<Integer> arrayList = new ArrayList<Integer>();
 			for (int j = 0; j < list.size(); j++)  {
 				if(list.get(i).getUsuario().equalsIgnoreCase(list.get(j).getUsuario())){
 					index++;
 				}
+				if(list.get(i).getUsuario().equalsIgnoreCase(list.get(j).getOutroUsuario())){
+					morte++;
+				}
 			}
-			if(index > 0){
+			if(index >= 0 && morte >= 0){
 				if(dadosUsuarios.containsKey(list.get(i).getUsuario())){
 					continue;
 				}
-				dadosUsuarios.put(list.get(i).getUsuario(), index);		
+				arrayList.add(index);
+				arrayList.add(morte);
+				dadosUsuarios.put(list.get(i).getUsuario(), arrayList);		
 			}			
 		}
 		//Ordena mapa em ordem do Maior para o menor
@@ -69,34 +77,31 @@ public class ControllerRanking {
 		return dadosUsuarios;
 	}
 
-	public String armaPreferidaVencedor(String nome) throws FileNotFoundException {
+	public String IndentificarArmaPreferida(String nome, List<Informacoes> listInfomacoes) throws FileNotFoundException {
 		Integer anterior = 0;
 		Integer atual = 0;
 		String armaPreferida = "";
-
 		Map<String, String> dados = gerarMapaDados(new FileReader("arquivo.log"));
 		retornarListaInformacoes(dados);
-		List<Informacoes> listaTemp = new ArrayList<Informacoes>();
-		//Lista Virá do metodo retornarListaInformacoes
-		List<Informacoes> listInfomacoes = null;
-		for (Informacoes informacoes : listInfomacoes) {	
-			if(informacoes.getUsuario().equalsIgnoreCase("Natan")){
-				listaTemp.add(informacoes);
-			}
-		}	
-		for (Informacoes informacoes2 : listaTemp) {
-			atual = 0;
-			String tempArma = informacoes2.getArma();
-			for (Informacoes informacoes : listaTemp) {
-				if(tempArma.equalsIgnoreCase(informacoes.getArma())){
-					atual++;
+		for (Informacoes informacoes : listInfomacoes) {
+			
+			if(informacoes.getUsuario().equalsIgnoreCase("Nick")){
+				String arma = informacoes.getArma();
+				for (Informacoes informacoes2 : listInfomacoes) {
+					if(arma.equalsIgnoreCase(informacoes2.getArma())){
+						atual++;
+						if(anterior < atual){
+							atual = anterior;
+							armaPreferida = informacoes2.getArma();
+						}
+						armaPreferida = arma;
+					}
 				}
 			}
-			if(atual > anterior){
-				anterior = atual;
-				armaPreferida = tempArma;
-			}
 		}
+		System.out.println(atual);
 		return armaPreferida;
 	}
+
+	
 }

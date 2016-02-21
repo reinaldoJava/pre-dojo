@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +30,28 @@ public class TesteRanking {
 	}
 	@Test
 	public void rankingUsuariosTest() throws FileNotFoundException {
-		Map<String, Integer> rankingList = new HashMap<String, Integer>();
-		rankingList.put("Roman", 19);
-		rankingList.put("<WORLD>", 9);
-		rankingList.put("Z99ptrz99", 7);
-		rankingList.put("Nick", 4);
-		rankingList.put("Natan", 5);
+		Map<String, List<Integer>> rankingList = new HashMap<String, List<Integer>>();
+		 ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		 arrayList.add(19);
+		 arrayList.add(1);
+		 ArrayList<Integer> arrayList1 = new ArrayList<Integer>();
+		 arrayList1.add(9);
+		 arrayList1.add(0);
+		 ArrayList<Integer> arrayList2 = new ArrayList<Integer>();
+		 arrayList2.add(7);
+		 arrayList2.add(3);
+		 ArrayList<Integer> arrayList3 = new ArrayList<Integer>();
+		 arrayList3.add(4);
+		 arrayList3.add(40);
+		 ArrayList<Integer> arrayList4 = new ArrayList<Integer>();
+		 arrayList4.add(4);
+		 arrayList4.add(0);
+		 
+		rankingList.put("Roman",arrayList);
+		rankingList.put("<WORLD>", arrayList1);
+		rankingList.put("Z99ptrz99", arrayList2);
+		rankingList.put("Nick", arrayList3);
+		rankingList.put("Natan", arrayList4);
 		FileReader log = new FileReader("arquivo.log");
 		ControllerRanking controllerRanking = new ControllerRanking();
 		List<Informacoes> list = controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log));
@@ -42,8 +59,10 @@ public class TesteRanking {
 	}
 	@Test
 	public void armaPreferidaVencedorTest() throws FileNotFoundException {
-
-		assertEquals("M16", new ControllerRanking().armaPreferidaVencedor("Natan"));
+		ControllerRanking controllerRanking = new ControllerRanking();
+		FileReader log = new FileReader("arquivo.log");
+		List<Informacoes> list = controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log));
+		assertEquals("M16", controllerRanking.IndentificarArmaPreferida("Natan", list));
 	}
 	
 }
