@@ -33,12 +33,17 @@ public class TesteRanking {
 		rankingList.put("Roman", 19);
 		rankingList.put("<WORLD>", 9);
 		rankingList.put("Z99ptrz99", 7);
-		rankingList.put("Nick", 5);
-		rankingList.put("Natan", 4);
+		rankingList.put("Nick", 4);
+		rankingList.put("Natan", 5);
 		FileReader log = new FileReader("arquivo.log");
 		ControllerRanking controllerRanking = new ControllerRanking();
 		List<Informacoes> list = controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log));
-		assertEquals(rankingList, controllerRanking.rankingUsuarios(list));
+		assertEquals(rankingList, controllerRanking.gerarRankingUsuarios(list));
+	}
+	@Test
+	public void armaPreferidaVencedorTest() throws FileNotFoundException {
+
+		assertEquals("M16", new ControllerRanking().armaPreferidaVencedor("Natan"));
 	}
 	
 }
