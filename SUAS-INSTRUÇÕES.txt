@@ -1,2 +1,4 @@
-Coloque aqui suas instruções ou comentários que ache útil/relevantes para possamos ler 
-quando estivermos avaliando a sua solução
+Foi usado java puro para todas as resoluÃ§Ãµes, sem nenhum framework.
+Criado um arquivo.log contendo vÃ¡rias situaÃ§Ãµs e mais usuÃ¡rios.
+Criado uma simple interface em java Swing para mostrar os dados.
+Todo o projeto foi criado usando TDD.
