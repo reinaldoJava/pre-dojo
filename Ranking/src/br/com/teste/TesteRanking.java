@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class TesteRanking {
 	}
 	@Test
 	public void rankingUsuariosTest() throws FileNotFoundException {
-		Map<String, List<Integer>> rankingList = new HashMap<String, List<Integer>>();
+		Map<String, List<Integer>> rankingList = new LinkedHashMap<String, List<Integer>>();
 		 ArrayList<Integer> arrayList = new ArrayList<Integer>();
 		 arrayList.add(19);
 		 arrayList.add(1);
@@ -44,14 +44,14 @@ public class TesteRanking {
 		 arrayList3.add(4);
 		 arrayList3.add(40);
 		 ArrayList<Integer> arrayList4 = new ArrayList<Integer>();
-		 arrayList4.add(4);
+		 arrayList4.add(5);
 		 arrayList4.add(0);
 		 
 		rankingList.put("Roman",arrayList);
 		rankingList.put("<WORLD>", arrayList1);
 		rankingList.put("Z99ptrz99", arrayList2);
-		rankingList.put("Nick", arrayList3);
 		rankingList.put("Natan", arrayList4);
+		rankingList.put("Nick", arrayList3);
 		FileReader log = new FileReader("arquivo.log");
 		ControllerRanking controllerRanking = new ControllerRanking();
 		List<Informacoes> list = controllerRanking.retornarListaInformacoes(controllerRanking.gerarMapaDados(log));

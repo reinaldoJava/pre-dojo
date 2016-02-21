@@ -2,15 +2,17 @@ package br.com.view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.SortedSet;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -25,7 +27,7 @@ import javax.swing.table.TableModel;
 import br.com.controller.ControllerRanking;
 import br.com.model.Informacoes;
 
-public class UploadArquivo extends JFrame {
+public class UploadArquivoView extends JFrame {
 
 	/**
 	 * 
@@ -35,21 +37,26 @@ public class UploadArquivo extends JFrame {
 	private ControllerRanking controller = new ControllerRanking();
 	private Map<String, String> mapaDados = null;
 	private List<Informacoes> listaInformacoes = null;
-	private Map<String, List<Integer>> rankingUsuarios;
+	private SortedSet<Entry<String, List<Integer>>> rankingUsuarios;
 	JTable table = new JTable();
 
-	public static TableModel toTableModel(Map<?,?> map) {
-	    DefaultTableModel model = new DefaultTableModel(
-	        new Object[] { "Usuario", "Matou", "Morreu" }, 0
-	    );
-	    for (Map.Entry<?,?> entry : map.entrySet()) {
-	    	String[] temp = String.valueOf(entry.getValue()).replace("[", "").replace("]", "").split(",");
-	        model.addRow(new Object[] { entry.getKey(), temp[0],temp[1]});
-	    }
-	    return model;
+	public TableModel toTableModel(SortedSet<Entry<String, List<Integer>>> rankingUsuarios) {
+		
+		Map<String, List<Integer>> map = new LinkedHashMap<String, List<Integer>>();
+		for (Entry<String, List<Integer>> entry : rankingUsuarios){
+			map.put(entry.getKey(), entry.getValue());
+		}
+		DefaultTableModel model = new DefaultTableModel(new Object[] {
+				"Usuario", "Matou", "Morreu" }, 0);
+		for (Map.Entry<?, ?> entry : map.entrySet()) {
+			String[] temp = String.valueOf(entry.getValue()).replace("[", "")
+					.replace("]", "").split(",");
+			model.addRow(new Object[] { entry.getKey(), temp[0], temp[1] });
+		}
+		return model;
 	}
 
-	public UploadArquivo() {
+	public UploadArquivoView() {
 		super("Analise do Arquivo de Log");
 
 		Container c = getContentPane();
@@ -58,8 +65,6 @@ public class UploadArquivo extends JFrame {
 
 		JButton btn = new JButton("Abrir Arquivo");
 		final JLabel label = new JLabel("Teste");
-
-		Object columnNames[] = { "Column One", "Column Two", "Column Three" };
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
@@ -76,29 +81,30 @@ public class UploadArquivo extends JFrame {
 						JOptionPane
 								.showMessageDialog(null, "Arquivo Invalido.");
 					}
+					String nomeVencendor = rankingUsuarios.first().getKey();
+					String armaPreferida = controller.IndentificarArmaPreferida(nomeVencendor, listaInformacoes);
 					table.setModel(toTableModel(rankingUsuarios));
 					table.setVisible(true);
-					label.setText("Reinaldo Usando a M16");
+					label.setText("A arma preferida de "+nomeVencendor+" é "+armaPreferida);
 					label.setVisible(true);
 				} else
 					JOptionPane.showMessageDialog(null,
 							"Voce nao selecionou nenhum arquivo.");
 			}
 		});
-
-		//table.setVisible(false);
+		
 		c.add(btn);
 		c.add(table);
 		c.add(label);
 		label.setVisible(false);
 		JScrollPane scrollPane = new JScrollPane(table);
 		c.add(scrollPane, BorderLayout.CENTER);
-		setSize(550, 300);
+		setSize(550, 480);
 		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		UploadArquivo app = new UploadArquivo();
+		UploadArquivoView app = new UploadArquivoView();
 		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
